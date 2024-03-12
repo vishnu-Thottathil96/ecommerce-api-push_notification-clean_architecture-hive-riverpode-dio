@@ -1,4 +1,5 @@
 import 'package:aqua_assignment/cart.dart';
+import 'package:aqua_assignment/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -57,113 +58,159 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SafeArea(
         child: isList
-            ? ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      height: containerHeight,
-                      color: Colors.grey[400],
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Container(
-                              width: imageWidth,
-                              color: Colors.amber,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Image.network(
-                                  'https://via.placeholder.com/150',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Dynamic text sizing example
-                                  Text(
-                                    'Title',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(fontSize: 16 * textScale),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Description',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(fontSize: 14 * textScale),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Price',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(fontSize: 14 * textScale),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Add to Cart',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.blue),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Column(
+            ? FutureBuilder(
+                future: a(),
+                builder: (context, value) {
+                  return ListView.builder(
+                    itemCount: value.data!.length,
+                    itemBuilder: (context, index) {
+                      final product = value.data![index];
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          height: containerHeight,
+                          color: Colors.grey[400],
+                          child: Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: RatingBar.builder(
-                                  itemSize: 20,
-                                  ignoreGestures: true,
-                                  initialRating: 3,
-                                  itemCount: 5,
-                                  itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber),
-                                  onRatingUpdate: (rating) {},
+                                padding: const EdgeInsets.all(20.0),
+                                child: Container(
+                                  width: imageWidth,
+                                  color: Colors.amber,
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Image.network(
+                                      product.thumbnail,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const Text('3.5')
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        product.title,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                            fontSize: 14 *
+                                                MediaQuery.textScaleFactorOf(
+                                                    context),
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                      // Dynamic text sizing example
+                                      // Text(
+                                      //   product.title,
+                                      //   style: Theme.of(context)
+                                      //       .textTheme
+                                      //       .titleLarge!
+                                      //       .copyWith(fontSize: 16 * textScale),
+                                      // ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        product.description,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(fontSize: 14 * textScale),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "₹ ${product.price.toString()}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(fontSize: 14 * textScale),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      const Text(
+                                        'Add to Cart',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.blue),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: RatingBar.builder(
+                                      allowHalfRating: true,
+                                      itemSize: 20,
+                                      ignoreGestures: true,
+                                      initialRating: product.rating.toDouble(),
+                                      itemCount: 5,
+                                      itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber),
+                                      onRatingUpdate: (rating) {},
+                                    ),
+                                  ),
+                                  Text(product.rating.toString())
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   );
-                },
-              )
-            : // GridView remains the same
-            Padding(
+                })
+            : Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        color: Colors.grey[400],
-                      ),
-                    );
-                  },
-                ),
+                child: FutureBuilder(
+                    future: a(),
+                    builder: (context, value) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1,
+                        ),
+                        itemCount: value.data!.length,
+                        itemBuilder: (context, index) {
+                          final product = value.data![index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  color: Colors.amber,
+                                  child: AspectRatio(
+                                    aspectRatio: 1.5,
+                                    child: Image.network(
+                                      product.thumbnail,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  product.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 14 *
+                                          MediaQuery.textScaleFactorOf(
+                                              context)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }),
               ),
       ),
     );
