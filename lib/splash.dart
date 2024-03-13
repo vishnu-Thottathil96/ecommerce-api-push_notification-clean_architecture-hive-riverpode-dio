@@ -1,4 +1,4 @@
-import 'package:aqua_assignment/home.dart';
+import 'package:aqua_assignment/features/home/presentation/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
