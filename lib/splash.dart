@@ -1,3 +1,4 @@
+import 'package:aqua_assignment/core/constants/app_assets.dart';
 import 'package:aqua_assignment/features/home/presentation/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -28,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Center(child: Lottie.asset('assets/splash_animation.json'))),
+      body:
+          SafeArea(child: Center(child: Lottie.asset(AppAssets.splashLottie))),
     );
   }
 }

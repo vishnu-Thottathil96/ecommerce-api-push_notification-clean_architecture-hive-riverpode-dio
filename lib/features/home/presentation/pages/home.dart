@@ -5,11 +5,10 @@ import 'package:aqua_assignment/features/cart/presentation/riverpod/cart_state.d
 import 'package:aqua_assignment/features/home/domain/entity/product_entity.dart';
 import 'package:aqua_assignment/features/home/presentation/riverpod/home_provider.dart';
 import 'package:aqua_assignment/core/util/toast.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// Assuming 'ProductEntity' and 'productsProvider' are defined as shown above
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -163,6 +162,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   thumbnail: product.thumbnail,
                                   images: product.images,
                                   count: 1),
+                            );
+                            AwesomeNotifications().createNotification(
+                              content: NotificationContent(
+                                id: 1,
+                                channelKey: 'basic_channel',
+                                title: 'Success',
+                                body: '${product.title} added to cart',
+                              ),
                             );
                             ShowNotification.showToast(
                                 '${product.title} added to cart');
